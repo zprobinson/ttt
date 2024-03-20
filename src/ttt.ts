@@ -1,31 +1,38 @@
-import type { Cell, PositionValue, TicTacToeBoard } from "./dtos";
+import { BoardPosition, SuperBoard, defaultSuperBoard } from "./dtos";
+import {
+  defaultBoard,
+  type Cell,
+  type GameSummary,
+  type PositionValue,
+  type TicTacToeBoard,
+} from "./dtos";
 
-/*
-row: [x, x, x] x 3
-column:
-[x, _, _
- x, _, _
- x, _, _] x 3
-diagonalRL:
-[x, _, _
- _, x, _
- _, _, x]
-diagonalLR:
-[_, _, x
- _, x, _
- x, _, _]
-*/
+export const toBoard = (moves: GameSummary["previousMoves"]): SuperBoard => {
+  let board = defaultSuperBoard;
+  moves.forEach((move) => {
+    const { value, position } = move;
+    const [outer, inner] = position
+      .split(":")
+      .map((x) => Number(x) as BoardPosition);
+    board[outer][inner].value = value;
+  });
+  return board as SuperBoard;
+};
 
 type WinSet = [Cell, Cell, Cell];
-const rowSets = (b: TicTacToeBoard): WinSet[] => [b[0], b[1], b[2]];
+const rowSets = (b: TicTacToeBoard): WinSet[] => [
+  [b[0], b[1], b[2]],
+  [b[3], b[4], b[5]],
+  [b[6], b[7], b[8]],
+];
 const colSets = (b: TicTacToeBoard): WinSet[] => [
-  [b[0][0], b[1][0], b[2][0]],
-  [b[0][1], b[1][1], b[2][1]],
-  [b[0][2], b[1][2], b[2][2]],
+  [b[0], b[3], b[6]],
+  [b[1], b[4], b[7]],
+  [b[2], b[5], b[8]],
 ];
 const diaSets = (b: TicTacToeBoard): WinSet[] => [
-  [b[0][0], b[1][1], b[2][2]],
-  [b[0][2], b[1][1], b[2][0]],
+  [b[0], b[4], b[8]],
+  [b[2], b[4], b[6]],
 ];
 
 export const winSetOptions = (b: TicTacToeBoard): WinSet[] => [
@@ -33,6 +40,12 @@ export const winSetOptions = (b: TicTacToeBoard): WinSet[] => [
   ...colSets(b),
   ...diaSets(b),
 ];
+
+export const hasAWinner = (b: TicTacToeBoard): boolean => {
+  return winSetOptions(b).some(
+    (ws) => ws.every((c) => c.value === "X") || ws.every((c) => c.value === "O")
+  );
+};
 
 export const aboutToWin = (b: TicTacToeBoard): WinSet[] => {
   const options = winSetOptions(b);

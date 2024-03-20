@@ -1,5 +1,5 @@
 const boardPositions = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
-type BoardPosition = (typeof boardPositions)[number];
+export type BoardPosition = (typeof boardPositions)[number];
 
 type ArchivedGame = {
   winner: Winner | "unknown";
@@ -45,15 +45,25 @@ export type GameSummary = {
 };
 
 export type Cell = { position: BoardPosition; value: PositionValue | "empty" };
-export type TicTacToeBoard = [
-  [Cell, Cell, Cell],
-  [Cell, Cell, Cell],
-  [Cell, Cell, Cell]
+//prettier-ignore
+export type TicTacToeBoard = [ Cell, Cell, Cell, Cell, Cell, Cell, Cell, Cell, Cell];
+const defaultCell = (position: BoardPosition): Cell => ({
+  position,
+  value: "empty",
+});
+//prettier-ignore
+export const defaultBoard: TicTacToeBoard = [
+  defaultCell(0), defaultCell(1), defaultCell(2),
+  defaultCell(3), defaultCell(4), defaultCell(5),
+  defaultCell(6), defaultCell(7), defaultCell(8),
 ];
-export type SuperBoard = [
-  [TicTacToeBoard, TicTacToeBoard, TicTacToeBoard],
-  [TicTacToeBoard, TicTacToeBoard, TicTacToeBoard],
-  [TicTacToeBoard, TicTacToeBoard, TicTacToeBoard]
+//prettier-ignore
+export type SuperBoard = [ TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard];
+//prettier-ignore
+export const defaultSuperBoard = [
+  defaultBoard, defaultBoard, defaultBoard,
+  defaultBoard, defaultBoard, defaultBoard,
+  defaultBoard, defaultBoard, defaultBoard,
 ];
 
 export type IdLookupResponse = {
