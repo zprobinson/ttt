@@ -67,14 +67,10 @@ export const getPlayer = (playerId: PlayerId, positionValue: PositionValue) => {
     const targetMove = selectMove(summary, positionValue);
     if (targetMove) {
       console.log("target move is: " + targetMove);
-      setTimeout(() => {
-        move(playerId, targetMove).catch(() => randomMove(playerId));
-      }, 2000);
+      move(playerId, targetMove).catch(() => randomMove(playerId));
     } else {
-      setTimeout(() => {
-        randomMove(playerId);
-        // .catch((error) =>console.error(`Error making random move: ${error.message}`));
-      }, 5);
+      randomMove(playerId);
+      // .catch((error) =>console.error(`Error making random move: ${error.message}`));
     }
   };
 
