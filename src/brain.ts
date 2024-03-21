@@ -5,14 +5,11 @@ import {
   SeriesSummary,
 } from "./dtos";
 import {
-  aboutToWin,
   hasAWinner,
   hasWinOportunity,
   printb,
-  printsb,
   toBoard,
   winSetCount,
-  winSetOptions,
   winningOptions,
 } from "./ttt";
 
@@ -40,10 +37,21 @@ export const selectMove = (
   if (previousMoves.length === 0) return "4:4";
 
   const superBoard = toBoard(previousMoves);
-  const currentBoardIndex = game.availableMoves.map(
+
+  const availableBoards = game.availableMoves.map(
     (move) => Number(move.split(":")[0]) as BoardPosition
-  )[0];
-  const currentBoard = superBoard[currentBoardIndex];
+  );
+  const distinctAvailableBoards = availableBoards.filter(
+    (n, i) => availableBoards.indexOf(n) === i
+  );
+
+  const currentBoardAndIndex = distinctAvailableBoards
+    .map((index) => ({ index: index, board: superBoard[index] }))
+    .sort((board) => 10 - winningOptions(board.board, me).length)[0];
+
+  const currentBoard = currentBoardAndIndex.board;
+  const currentBoardIndex = currentBoardAndIndex.index;
+  //const currentBoard = superBoard[currentBoardIndex];
   //   console.log("super board\n", printsb(superBoard));
   console.log("current board\n", printb(currentBoard));
 
@@ -85,9 +93,13 @@ export const selectMove = (
 
   if (allPotentialWinningSets.length > 0) {
     const bestOptions = winSetCount(allPotentialWinningSets);
-    const bestOption = [...bestOptions.entries()].reduce((a, b) =>
-      a[1] > b[1] ? a : b
-    );
+    const sorted = [...bestOptions.entries()].sort((a, b) => b[1] - a[1]);
+    const rnd = Math.random();
+    rnd < 0.3 && console.log("selected 1st sorted option");
+    const bestOption = rnd < 0.3 ? sorted[0] : sorted[1];
+    // const bestOption = [...bestOptions.entries()].reduce((a, b) =>
+    //   a[1] > b[1] ? a : b
+    // );
 
     console.log("best option", JSON.stringify(bestOption));
     console.log(`${currentBoardIndex}:${bestOption[0]}`);

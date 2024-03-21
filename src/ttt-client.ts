@@ -44,17 +44,17 @@ const playSeriesRandomly = (playerId: PlayerId | SeriesId) => {
   });
 };
 
-// playSeries('1ebb5402-3fa1-47fd-8649-0c8d56a2ed04'); // X
+playSeries("9710b88e-a42b-4064-a2aa-9983cc4ffa9c"); // X
 
 // playSeries('e4d161b7-95c8-4814-be5a-beb583959d8a'); // O
 
-createSeries(100, 5, "Testing Babye", "")
-  .then((sc) => {
-    console.log(`Series ${sc.id} created!`);
-    console.log(`PlayerX: ${sc.playerIds.x} PlayerO: ${sc.playerIds.o}`);
-    setTimeout(() => {
-      playSeries(sc.playerIds.x);
-      playSeriesRandomly(sc.playerIds.o);
-    }, 10000);
-  })
-  .catch(console.error);
+// createSeries(100, 5, "Testing Babye", "")
+//   .then((sc) => {
+//     console.log(`Series ${sc.id} created!`);
+//     console.log(`PlayerX: ${sc.playerIds.x} PlayerO: ${sc.playerIds.o}`);
+//     setTimeout(() => {
+//       playSeries(sc.playerIds.x);
+//       playSeriesRandomly(sc.playerIds.o);
+//     }, 10000);
+//   })
+//   .catch(console.error);
