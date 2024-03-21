@@ -48,7 +48,7 @@ const playSeriesRandomly = (playerId: PlayerId | SeriesId) => {
 
 // playSeries('e4d161b7-95c8-4814-be5a-beb583959d8a'); // O
 
-createSeries(1, 30, "Testing Babye", "")
+createSeries(100, 5, "Testing Babye", "")
   .then((sc) => {
     console.log(`Series ${sc.id} created!`);
     console.log(`PlayerX: ${sc.playerIds.x} PlayerO: ${sc.playerIds.o}`);
