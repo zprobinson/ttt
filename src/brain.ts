@@ -42,19 +42,29 @@ export const selectMove = (
   const imWinning = winSets.find((ws) =>
     ws.every((c) => c.value === me || c.value === "empty")
   );
+
+  console.log("am I winning?", imWinning);
+
   // TODO: return winning move
-  const winInnerIndex = imWinning?.findIndex((c) => c.value === "empty");
-  if (winInnerIndex !== undefined) {
-    return `${currentBoardIndex}:${winInnerIndex as BoardPosition}`;
+  const winInner = imWinning?.find((c) => c.value === "empty");
+  console.log("winning cell: " + JSON.stringify(winInner));
+  if (winInner !== undefined) {
+    console.log(`${currentBoardIndex}:${winInner.position}`);
+    return `${currentBoardIndex}:${winInner.position}`;
   }
   const almostLosing = winSets.find(
     (ws) =>
       ws.filter((c) => (me === "O" ? c.value === "X" : c.value === "O"))
         .length === 2
   );
-  const loseInnerIndex = almostLosing?.findIndex((c) => c.value === "empty");
+
+  console.log("am I almost losing?", almostLosing);
+
+  const blockInner = almostLosing?.find((c) => c.value === "empty");
+  console.log("losing index: " + JSON.stringify(blockInner));
   // TODO: return blocking move
-  if (loseInnerIndex !== undefined) {
-    return `${currentBoardIndex}:${loseInnerIndex as BoardPosition}`;
+  if (blockInner !== undefined) {
+    console.log(`${currentBoardIndex}:${blockInner.position}`);
+    return `${currentBoardIndex}:${blockInner.position}`;
   }
 };

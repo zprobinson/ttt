@@ -8,6 +8,7 @@ import {
 } from "./clientActions";
 import { getPlayer } from "./player";
 import { subscribe } from "./socketSubscription";
+import { random } from "./test-bot";
 
 const playSeries = (playerId: PlayerId | SeriesId) => {
   lookupId(playerId).then((idLookup) => {
@@ -38,7 +39,7 @@ const playSeriesRandomly = (playerId: PlayerId | SeriesId) => {
         playerId,
         idLookup.type === "playerX" ? "X" : "O"
       );
-      subscribe(playerId, player.random);
+      subscribe(playerId, random(playerId, player.positionValue));
     }
   });
 };
@@ -47,12 +48,7 @@ const playSeriesRandomly = (playerId: PlayerId | SeriesId) => {
 
 // playSeries('e4d161b7-95c8-4814-be5a-beb583959d8a'); // O
 
-createSeries(
-  20,
-  300,
-  "Testing Babye",
-  "A series of 100 games with a 15 second time control"
-)
+createSeries(1, 30, "Testing Babye", "")
   .then((sc) => {
     console.log(`Series ${sc.id} created!`);
     console.log(`PlayerX: ${sc.playerIds.x} PlayerO: ${sc.playerIds.o}`);
