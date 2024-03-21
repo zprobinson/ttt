@@ -46,6 +46,29 @@ export const hasAWinner = (b: TicTacToeBoard): boolean => {
   );
 };
 
+export const hasWinOportunity = (
+  b: TicTacToeBoard,
+  player: PositionValue
+): WinSet[] => {
+  return winSetOptions(b).filter((ws) =>
+    ws.every((c) => c.value === player || c.value === "empty")
+  );
+};
+
+// a function that takes in a WinSet[] and returns a map of each position to the number of winning sets it is a part of
+export const winSetCount = (winSets: WinSet[]): Map<BoardPosition, number> => {
+  const counts = new Map<BoardPosition, number>();
+  winSets.forEach((ws) => {
+    ws.forEach((c) => {
+      if (c.value === "empty") {
+        const currentCount = counts.get(c.position) || 0;
+        counts.set(c.position, currentCount + 1);
+      }
+    });
+  });
+  return counts;
+};
+
 export const winningOptions = (
   b: TicTacToeBoard,
   player: PositionValue

@@ -7,9 +7,12 @@ import {
 import {
   aboutToWin,
   hasAWinner,
+  hasWinOportunity,
   printb,
   printsb,
   toBoard,
+  winSetCount,
+  winSetOptions,
   winningOptions,
 } from "./ttt";
 
@@ -55,7 +58,6 @@ export const selectMove = (
 
   console.log("am I winning?", JSON.stringify(myWinningOptions));
 
-  // TODO: return winning move
   if (myWinningOptions.length > 0) {
     const defaultOption = myWinningOptions[0];
     const winInner = defaultOption.find((c) => c.value === "empty")!;
@@ -66,12 +68,29 @@ export const selectMove = (
 
   console.log("am I almost losing?", JSON.stringify(opponentWinningOptions));
 
-  // TODO: return blocking move
   if (opponentWinningOptions.length > 0) {
     const defaultOption = opponentWinningOptions[0];
     const blockInner = defaultOption.find((c) => c.value === "empty")!;
 
     console.log(`${currentBoardIndex}:${blockInner.position}`);
     return `${currentBoardIndex}:${blockInner.position}`;
+  }
+
+  // TODO: Best move based on best chances in current board.
+  const allPotentialWinningSets = hasWinOportunity(currentBoard, me);
+  console.log(
+    "are there any win sets that I should target?",
+    JSON.stringify(allPotentialWinningSets)
+  );
+
+  if (allPotentialWinningSets.length > 0) {
+    const bestOptions = winSetCount(allPotentialWinningSets);
+    const bestOption = [...bestOptions.entries()].reduce((a, b) =>
+      a[1] > b[1] ? a : b
+    );
+
+    console.log("best option", JSON.stringify(bestOption));
+    console.log(`${currentBoardIndex}:${bestOption[0]}`);
+    return `${currentBoardIndex}:${bestOption[0]}`;
   }
 };
