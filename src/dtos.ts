@@ -52,7 +52,7 @@ const defaultCell = (position: BoardPosition): Cell => ({
   value: "empty",
 });
 //prettier-ignore
-export const defaultBoard: TicTacToeBoard = [
+export const defaultBoard = () : TicTacToeBoard => [
   defaultCell(0), defaultCell(1), defaultCell(2),
   defaultCell(3), defaultCell(4), defaultCell(5),
   defaultCell(6), defaultCell(7), defaultCell(8),
@@ -60,10 +60,10 @@ export const defaultBoard: TicTacToeBoard = [
 //prettier-ignore
 export type SuperBoard = [ TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard, TicTacToeBoard];
 //prettier-ignore
-export const defaultSuperBoard = [
-  defaultBoard, defaultBoard, defaultBoard,
-  defaultBoard, defaultBoard, defaultBoard,
-  defaultBoard, defaultBoard, defaultBoard,
+export const defaultSuperBoard = () => [
+  defaultBoard(), defaultBoard(), defaultBoard(),
+  defaultBoard(), defaultBoard(), defaultBoard(),
+  defaultBoard(), defaultBoard(), defaultBoard(),
 ];
 
 export type IdLookupResponse = {

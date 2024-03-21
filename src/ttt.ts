@@ -1,14 +1,13 @@
-import { BoardPosition, SuperBoard, defaultSuperBoard } from "./dtos";
 import {
-  defaultBoard,
-  type Cell,
-  type GameSummary,
-  type PositionValue,
-  type TicTacToeBoard,
+  BoardPosition,
+  PositionValue,
+  SuperBoard,
+  defaultSuperBoard,
 } from "./dtos";
+import { type Cell, type GameSummary, type TicTacToeBoard } from "./dtos";
 
 export const toBoard = (moves: GameSummary["previousMoves"]): SuperBoard => {
-  let board = defaultSuperBoard;
+  let board = defaultSuperBoard();
   moves.forEach((move) => {
     const { value, position } = move;
     const [outer, inner] = position
@@ -47,6 +46,17 @@ export const hasAWinner = (b: TicTacToeBoard): boolean => {
   );
 };
 
+export const winningOptions = (
+  b: TicTacToeBoard,
+  player: PositionValue
+): WinSet[] => {
+  return winSetOptions(b).filter(
+    (ws) =>
+      ws.filter((c) => c.value === player).length === 2 &&
+      ws.every((c) => c.value === player || c.value === "empty")
+  );
+};
+
 export const aboutToWin = (b: TicTacToeBoard): WinSet[] => {
   const options = winSetOptions(b);
   const aboutWinImpl = (ws: WinSet): boolean => {
@@ -59,4 +69,13 @@ export const aboutToWin = (b: TicTacToeBoard): WinSet[] => {
   };
 
   return options.filter(aboutWinImpl);
+};
+
+export const printb = (b: TicTacToeBoard): string => {
+  const x = b.map((c) => (c.value === "empty" ? " " : c.value));
+  return `${x[0]} | ${x[1]} | ${x[2]}\n---|---|---\n ${x[3]} | ${x[4]} | ${x[5]}\n---|---|---\n ${x[6]} | ${x[7]} | ${x[8]}`;
+};
+
+export const printsb = (sb: SuperBoard): string => {
+  return sb.map(printb).join("\n\n");
 };

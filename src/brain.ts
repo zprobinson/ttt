@@ -4,7 +4,14 @@ import {
   PositionValue,
   SeriesSummary,
 } from "./dtos";
-import { aboutToWin, hasAWinner, toBoard } from "./ttt";
+import {
+  aboutToWin,
+  hasAWinner,
+  printb,
+  printsb,
+  toBoard,
+  winningOptions,
+} from "./ttt";
 
 export const selectMove = (
   summary: SeriesSummary,
@@ -27,43 +34,43 @@ export const selectMove = (
   }
 
   const previousMoves = game.previousMoves;
-  if (previousMoves.length === 0) return "0:0";
+  if (previousMoves.length === 0) return "4:4";
 
   const superBoard = toBoard(previousMoves);
-  const [currentTurn] = game.currentTurn;
-  const currentBoardIndex = Number(
-    previousMoves[previousMoves.length - 1].position.split(":")[0]
-  ) as BoardPosition;
+  const currentBoardIndex = game.availableMoves.map(
+    (move) => Number(move.split(":")[0]) as BoardPosition
+  )[0];
   const currentBoard = superBoard[currentBoardIndex];
+  //   console.log("super board\n", printsb(superBoard));
+  console.log("current board\n", printb(currentBoard));
+
   const availableMoves = game.availableMoves;
 
   const currentBoardHasWinner: boolean = hasAWinner(currentBoard);
-  const winSets = aboutToWin(currentBoard);
-  const imWinning = winSets.find((ws) =>
-    ws.every((c) => c.value === me || c.value === "empty")
-  );
+  console.log("currentBoardHasWinner: " + currentBoardHasWinner);
 
-  console.log("am I winning?", imWinning);
+  const opponent = me === "X" ? "O" : "X";
+  const myWinningOptions = winningOptions(currentBoard, me);
+  const opponentWinningOptions = winningOptions(currentBoard, opponent);
+
+  console.log("am I winning?", JSON.stringify(myWinningOptions));
 
   // TODO: return winning move
-  const winInner = imWinning?.find((c) => c.value === "empty");
-  console.log("winning cell: " + JSON.stringify(winInner));
-  if (winInner !== undefined) {
+  if (myWinningOptions.length > 0) {
+    const defaultOption = myWinningOptions[0];
+    const winInner = defaultOption.find((c) => c.value === "empty")!;
+
     console.log(`${currentBoardIndex}:${winInner.position}`);
     return `${currentBoardIndex}:${winInner.position}`;
   }
-  const almostLosing = winSets.find(
-    (ws) =>
-      ws.filter((c) => (me === "O" ? c.value === "X" : c.value === "O"))
-        .length === 2
-  );
 
-  console.log("am I almost losing?", almostLosing);
+  console.log("am I almost losing?", JSON.stringify(opponentWinningOptions));
 
-  const blockInner = almostLosing?.find((c) => c.value === "empty");
-  console.log("losing index: " + JSON.stringify(blockInner));
   // TODO: return blocking move
-  if (blockInner !== undefined) {
+  if (opponentWinningOptions.length > 0) {
+    const defaultOption = opponentWinningOptions[0];
+    const blockInner = defaultOption.find((c) => c.value === "empty")!;
+
     console.log(`${currentBoardIndex}:${blockInner.position}`);
     return `${currentBoardIndex}:${blockInner.position}`;
   }
